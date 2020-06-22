@@ -6,21 +6,21 @@ Have you ever wondered what an application architecture would look like if you c
 ## CNCF Projects Application 
 The CNCF Projects App is a sample expense application simulating a user submitting an expense report. The application consists of the following:
 
-* Kubernetes - Container Orchestration Cluster (CNCF)
-* Rook - Storage Management (CNCF)
-* Harbor - Container Registry (CNCF)
-* NATS - Pub/Sub Messaging (CNCF)
-* Linkerd - Service Mesh (CNCF)
-* Prometheus - Monitoring (CNCF)
-* Jaeger - Observability/Tracing (CNCF)
-* OpenFaas - Functions
-* MySQL - Database
-* Nginx - Kubernetes Ingress Controller
-* Tekton CI/CD (CD Foundation)
-* Grafana - Dashboard
-* SendGrid - Email Service
-* GitHub - Code Repository
-* Web Front-End & Web API - .NET Core
+* [Kubernetes](https://kubernetes.io/) - Container Orchestration Cluster (CNCF)
+* [Rook](https://rook.io/) - Storage Management (CNCF)
+* [Harbor](https://goharbor.io/) - Container Registry (CNCF)
+* [NATS](https://nats.io/) - Pub/Sub Messaging (CNCF)
+* [Linkerd[(https://linkerd.io/) - Service Mesh (CNCF)
+* [Prometheus](https://prometheus.io/) - Monitoring (CNCF)
+* [Jaeger](https://www.jaegertracing.io/) - Observability/Tracing (CNCF)
+* [OpenFaaS](https://www.openfaas.com/) - Functions
+* [MySQL](https://www.mysql.com/) - Database
+* [Nginx](https://www.nginx.com/) - Kubernetes Ingress Controller
+* [Tekton](https://tekton.dev/) CI/CD (CD Foundation)
+* [Grafana](https://grafana.com/) - Dashboard
+* [SendGrid](https://sendgrid.com/) - Email Service
+* [GitHub](https://github.com/) - Code Repository
+* Web Front-End & Web API - [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/about)
 
 **TODO** : Need screenshots of app of various screens.
 
