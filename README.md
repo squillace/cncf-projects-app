@@ -10,7 +10,7 @@ The CNCF Projects App is a sample expense application simulating a user submitti
 * [Rook](https://rook.io/) - Storage Management (CNCF)
 * [Harbor](https://goharbor.io/) - Container Registry (CNCF)
 * [NATS](https://nats.io/) - Pub/Sub Messaging (CNCF)
-* [Linkerd[(https://linkerd.io/) - Service Mesh (CNCF)
+* [Linkerd](https://linkerd.io/) - Service Mesh (CNCF)
 * [Prometheus](https://prometheus.io/) - Monitoring (CNCF)
 * [Jaeger](https://www.jaegertracing.io/) - Observability/Tracing (CNCF)
 * [OpenFaaS](https://www.openfaas.com/) - Functions
