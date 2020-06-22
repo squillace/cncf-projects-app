@@ -1,5 +1,8 @@
 # CNCF Projects App
 
+## Overview
+Have you ever wondered what an application architecture would look like if you committed to using mostly all graduated or incubating projects from the [Cloud Native Computing Foundation](https://www.cncf.io/projects/)? This repo, the [CNCF](https://www.cncf.io/) Projects App, attempts to answer that question with an example expense application that is made up of over 90% CNCF projects. 
+
 ## Architecture
 TODO
 
