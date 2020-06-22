@@ -4,7 +4,7 @@
 Have you ever wondered what an application architecture would look like if you committed to using mostly all graduated or incubating projects from the [Cloud Native Computing Foundation](https://www.cncf.io/projects/)? This repo, the **[CNCF](https://www.cncf.io/) Projects App**, attempts to answer that question with an example expense application that is made up almost exclusively of CNCF projects. 
 
 ## CNCF Projects Application 
-The CNCF Projects App is a sample expense application simulating a user submitting an expense report. The application consists of the following:
+The CNCF Projects App is a sample expense application simulating a user submitting an expense report. The application consists of the following components:
 
 * [Kubernetes](https://kubernetes.io/) - Container Orchestration Cluster (CNCF)
 * [Rook](https://rook.io/) - Storage Management (CNCF)
