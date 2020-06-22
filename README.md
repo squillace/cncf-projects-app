@@ -30,7 +30,7 @@ Below is the documented CNCF Projects App architecture for reference.
 ![Alt text](/images/cncf-projects-app-arc.png)
 
 ## Install
-We are currently working on a Helm and CNAB installation of the repo. As of now please follow the below instructions in sequence to deploy the CNCF Projects App.
+We are currently working on both a [Helm](https://helm.sh/) and [CNAB](https://cnab.io/) installation of the repo. As of now please follow the below instructions in sequence to deploy the CNCF Projects App in your environment.
 
 
 
