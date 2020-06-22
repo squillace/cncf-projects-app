@@ -6,7 +6,21 @@ Have you ever wondered what an application architecture would look like if you c
 ## CNCF Projects Application 
 The CNCF Projects App is a sample expense application simulating a user submitting an expense report. The application consists of the following:
 
-* 
+* Kubernetes - Container Orchestration Cluster (CNCF)
+* Rook - Storage Management (CNCF)
+* Harbor - Container Registry (CNCF)
+* NATS - Pub/Sub Messaging (CNCF)
+* Linkerd - Service Mesh (CNCF)
+* Prometheus - Monitoring (CNCF)
+* Jaeger - Observability/Tracing (CNCF)
+* OpenFaas - Functions
+* MySQL - Database
+* Nginx - Kubernetes Ingress Controller
+* Tekton CI/CD (CD Foundation)
+* Grafana - Dashboard
+* SendGrid - Email Service
+* GitHub - Code Repository
+* Web Front-End & Web API - .NET Core
 
 **TODO** : Need screenshots of app of various screens.
 
