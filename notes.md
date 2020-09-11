@@ -171,7 +171,7 @@ admin
 admin
 ```
 
-## MySQL installation
+## MySQL Installation
 
 Deploy Mysql
 ```
