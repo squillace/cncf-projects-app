@@ -3,7 +3,7 @@ Refer the [yml](yml) folder for the yamls
 
 - [Please find Source Code here](src)
 
-#Setup
+# Setup
 
 Create a Kubernetes Cluster
 
@@ -35,7 +35,7 @@ If using AKS, a DNS name label can be assigend to the public IP of the Loadbalan
  - Navigate to the Configuration blade and set a unique name in the DNS name label
  - Use the FQDN. For ex. uniquename.centralus.cloudapp.azure.com
 
-##Rook Installation
+## Rook Installation
 
 ```
 kubectl apply -f yml/rook-common.yaml
@@ -44,7 +44,7 @@ kubectl apply -f yml/rook-cluster.yaml
 kubectl apply -f yml/rook-storageclass.yaml
 ```
 
-##Harbor Installation
+## Harbor Installation
 
 Install Ingress for Harbor.
 ```
@@ -171,7 +171,7 @@ admin
 admin
 ```
 
-##MySQL installation
+## MySQL installation
 
 Deploy Mysql
 ```
@@ -237,7 +237,7 @@ Install MySQL Client Locally
 apt install mysql-client
 ```
 
-##OpenFaaS
+## OpenFaaS
 
 ```
 helm repo add openfaas https://openfaas.github.io/faas-netes/
@@ -260,7 +260,7 @@ Install the Nats Connector
 ```
 kubectl apply -f yml/openfaas-nats-connector.yaml
 ```
-##Prometheus
+## Prometheus
 
 ```
 kubectl create ns monitoring
@@ -275,7 +275,7 @@ kubectl port-forward svc/prometheus-prometheus-oper-prometheus 9090:9090 -n moni
 Browse to http://localhost:9090
 ```
 
-##Jaeger
+## Jaeger
 
 ```
 helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
@@ -290,7 +290,7 @@ kubectl port-forward svc/jaeger-query 8080:80 -n tracing
 Browse to http://localhost:8080
 ```
 
-##Linkerd
+## Linkerd
 
 Deploy Linkered
 ```
@@ -353,7 +353,7 @@ kubectl port-forward svc/linkerd-web 8080:8084 -n linkerd
 Browse to http://localhost:8080
 ```
 
-##Tekton
+## Tekton
 Install Tekton pipelines
 ```
 kubectl apply -f https://storage.googleapis.com/tekton-releases/latest/release.yaml
@@ -375,7 +375,7 @@ kubectl port-forward svc/tekton-dashboard 8080:9097  -n tekton-pipelines
 Browse to http://localhost:8080
 ```
 
-##App Installation
+## App Installation
 
 Create the Project and User in Harbor
 - Login to Harbor
@@ -418,7 +418,7 @@ kubectl create secret docker-registry regcred --docker-server="https://$registry
 kubectl create secret docker-registry regcred --docker-server="https://$registryHost" --docker-username=conexp  --docker-password=FTA@CNCF0n@zure3  --docker-email=user@mycompany.com -n openfaas-fn
 ```
 
-##Tekton - App Deployment
+## Tekton - App Deployment
 
 ```
 kubectl create ns conexp-mvp-devops
