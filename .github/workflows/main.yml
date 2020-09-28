@@ -22,19 +22,23 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Setup Porter
+        # You may pin to the exact commit or the version.
+        # uses: getporter/gh-action@d8539f57d75587d98651fc94de9e7e63abfaf75e
+        uses: getporter/gh-action@v0.1.1
+      - name: Pull in helm3 mixin
+        run: porter mixins install helm3 --url https://github.com/MChorfa/porter-helm3/releases/download --version v0.1.7
+      - name: Login to GitHub Packages OCI Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_PASSWORD }}
+#      - name: Retag bundle for ghcr.io
+#        run: |
+#          sed -i.bu 's/squillace\//phillipgibson\//g' ./porter.yaml
+#          grep "tag:" ./porter.yaml
+#          grep "version" ./porter.yaml
+      - name: Porter publish to ghcr.io
+        run: porter publish
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-- name: Setup Porter
-  # You may pin to the exact commit or the version.
-  # uses: getporter/gh-action@d8539f57d75587d98651fc94de9e7e63abfaf75e
-  uses: getporter/gh-action@v0.1.1
-  with:
-    # Specify which version of Porter to install. Any version from v0.18.1-beta.2 onwards is valid. If left blank, will default to latest.
-    porter_version: # optional, default is latest
