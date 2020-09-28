@@ -1,102 +1,42 @@
-# My First Bundle
-
-<<<<<<< HEAD
-Have you ever wondered what an application architecture would look like if you committed to using mostly all graduated or incubating projects from the [Cloud Native Computing Foundation](https://www.cncf.io/projects/)? This repo, the **[CNCF](https://www.cncf.io/) Projects App**, attempts to answer that question with an example expense application that is made up almost exclusively of CNCF projects. 
-
-## Table of Contents
-- [Overview](#overview)
-- [CNCF Projects App Overview](#cncf-projects-app-overview)
-- [CNCF Projects App Architecture](#cncf-projects-app-architecture)
-- [Install](#install)
-- [Contributing](#contributing)
-
+# CNCF Projects App
 
 ## Overview
-The CNCF Projects App project and application is not to be considered a reference architecture for any of the CNCF projects in use, but to serve as an "art of the possible" with the goal of using as many CNCF projects as possible to create a functional real world application. The project goal to encourage new people venturing into the world of open source, and specifically the CNCF community, to participate and provide high-level guidance on what each CNCF project capablities are and how the project can function for a true business application. We hope this sample application becomes a reference starting point for those getting started in the open source community, as well as seasoned maintainers and contributors to work along on this project to extend it in various scenarios.
+Have you ever wondered what an application architecture would look like if you committed to using mostly all graduated or incubating projects from the [Cloud Native Computing Foundation](https://www.cncf.io/projects/)? This repo, the **[CNCF](https://www.cncf.io/) Projects App**, attempts to answer that question with an example expense application that is made up almost exclusively of CNCF projects. 
 
-
-
-## CNCF Projects App Overview
+## CNCF Projects Application 
 The CNCF Projects App is a sample expense application simulating a user submitting an expense report. The application consists of the following components:
 
-* [GitHub](https://github.com/) - Code Repository
-* [Grafana](https://grafana.com/) - Dashboard
-* [Harbor](https://goharbor.io/) - Container Registry (CNCF)
-* [Jaeger](https://www.jaegertracing.io/) - Observability/Tracing (CNCF)
 * [Kubernetes](https://kubernetes.io/) - Container Orchestration Cluster (CNCF)
-* [Linkerd](https://linkerd.io/) - Service Mesh (CNCF)
-* [MySQL](https://www.mysql.com/) - Database
-* [NATS](https://nats.io/) - Pub/Sub Messaging (CNCF)
-* [Nginx](https://www.nginx.com/) - Kubernetes Ingress Controller
-* [OpenFaaS](https://www.openfaas.com/) - Functions
-* [Prometheus](https://prometheus.io/) - Monitoring (CNCF)
 * [Rook](https://rook.io/) - Storage Management (CNCF)
-* [SendGrid](https://sendgrid.com/) - Email Service
+* [Harbor](https://goharbor.io/) - Container Registry (CNCF)
+* [NATS](https://nats.io/) - Pub/Sub Messaging (CNCF)
+* [Linkerd](https://linkerd.io/) - Service Mesh (CNCF)
+* [Prometheus](https://prometheus.io/) - Monitoring (CNCF)
+* [Jaeger](https://www.jaegertracing.io/) - Observability/Tracing (CNCF)
+* [OpenFaaS](https://www.openfaas.com/) - Functions
+* [MySQL](https://www.mysql.com/) - Database
+* [Nginx](https://www.nginx.com/) - Kubernetes Ingress Controller
 * [Tekton](https://tekton.dev/) CI/CD (CD Foundation)
+* [Grafana](https://grafana.com/) - Dashboard
+* [SendGrid](https://sendgrid.com/) - Email Service
+* [GitHub](https://github.com/) - Code Repository
 * Web Front-End & Web API - [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/about)
-=======
-This is an empty bundle that porter has created to get you started!
 
-# Contents
+**TODO** : Need screenshots of app of various screens.
 
-## porter.yaml
->>>>>>> first version
-
-This is the porter manifest. See https://porter.sh/author-bundles/ for 
-details on every field and how to configure your bundle. This is a required
-file.
-
-<<<<<<< HEAD
-## CNCF Projects App Architecture
+## Architecture
 Below is the documented CNCF Projects App architecture for reference.
-=======
-## helpers.sh
->>>>>>> first version
 
-This is a bash script where you can place helper functions that you can call
-from your porter.yaml file.
+![Alt text](/images/cncf-projects-app-arc.png)
 
-<<<<<<< HEAD
 ## Install
-As of now please follow the instructions [here](notes.md) in sequence to deploy the CNCF Projects App in your environment. We are currently working on both a [Helm](https://helm.sh/) and [CNAB](https://cnab.io/) installation of the repo. 
-=======
-## README.md
->>>>>>> first version
+We are currently working on both a [Helm](https://helm.sh/) and [CNAB](https://cnab.io/) installation of the repo. As of now please follow the instructions [here](notes.md) in sequence to deploy the CNCF Projects App in your environment.
 
-This explains the files created by `porter create`. It is not used by porter and
-can be deleted.
 
-## Dockerfile.tmpl
 
-<<<<<<< HEAD
 ## Contributing
-This project welcomes contributions and suggestions. 
-=======
-This is a template Dockerfile for the bundle's invocation image. You can
-customize it to use different base images, install tools and copy configuration
-files. Porter will use it as a template and append lines to it for the mixin and to set
-the CMD appropriately for the CNAB specification. You can delete this file if you don't
-need it.
+This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
 
-Add the following line to **porter.yaml** to enable the Dockerfile template:
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
 
-```yaml
-dockerfile: Dockerfile.tmpl
-```
-
-By default, the Dockerfile template is disabled and Porter automatically copies
-all of the files in the current directory into the bundle's invocation image. When
-you use a custom Dockerfile template, you must manually copy files into the bundle
-using COPY statements in the Dockerfile template.
-
-## .gitignore
-
-This is a default file that we provide to help remind you which files are
-generated by Porter, and shouldn't be committed to source control. You can
-delete it if you don't need it.
-
-## .dockerignore
-
-This is a default file that controls which files are copied into the bundle's
-invocation image by default. You can delete it if you don't need it.
->>>>>>> first version
+This project has adopted the Microsoft Open Source Code of Conduct. For more information see the Code of Conduct FAQ or contact opencode@microsoft.com with any additional questions or comments.
