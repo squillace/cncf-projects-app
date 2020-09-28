@@ -34,7 +34,7 @@ install:
       name: nginx-ingress
       chart: stable/nginx-ingress
   #      version: CHART_VERSION
-      namespace: ingress-basic
+      namespace: "{{bundle.parameters.ingress-namespace}}"
       replace: true
       wait: true # default true
       set:
@@ -70,7 +70,7 @@ credentials:
 
 # Below is an example of how to define parameters
 # See https://porter.sh/author-bundles/#parameters
-#parameters:
-#  - name: mysql_user
-#    type: string
-#    default: wordpress
+parameters:
+  - name: ingress-namespace
+    type: string
+    default: ingress-basic
