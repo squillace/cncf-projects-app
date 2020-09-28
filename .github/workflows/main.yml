@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.GHCR_PASSWORD }}
       - name: Retag bundle for ghcr.io
         run: |
-          sed -i.bu 's/squillace\//\//g' ./porter.yaml
+          sed -i.bu 's/squillace\//squillace\//g' ./porter.yaml
           grep "tag:" ./porter.yaml
           grep "version" ./porter.yaml
       - name: Porter publish to ghcr.io
