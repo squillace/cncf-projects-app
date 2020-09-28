@@ -34,11 +34,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_PASSWORD }}
-#      - name: Retag bundle for ghcr.io
-#        run: |
-#          sed -i.bu 's/squillace\//phillipgibson\//g' ./porter.yaml
-#          grep "tag:" ./porter.yaml
-#          grep "version" ./porter.yaml
+      - name: Retag bundle for ghcr.io
+        run: |
+          sed -i.bu "s/squillace\//${{ github.repository_owner }}\//g" ./porter.yaml
+          grep "tag:" ./porter.yaml
+          grep "version" ./porter.yaml
       - name: Porter publish to ghcr.io
         run: porter publish
 
