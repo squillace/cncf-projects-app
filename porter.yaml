@@ -15,7 +15,29 @@ mixins:
   - exec
   - kubernetes
   - helm3:
-      clientVersion: v3.3.2
+      #NOTE: the recently secured version of Helm 3 detects and fails the jetstack 
+      # helm chart out due to an invalid yaml key "serverInfo"
+      clientVersion: v3.3.3
+      repositories:
+        # Add the official stable repository
+        stable:
+          url: "https://kubernetes-charts.storage.googleapis.com"
+        # Install nginx ingress for Harbor
+        ingress-nginx:
+          url: "https://kubernetes.github.io/ingress-nginx"
+        # Add the Jetstack Helm repository
+        jetstack:
+          url: "https://charts.jetstack.io"
+        # Add the harbor helm repo 
+        harbor:
+          url: "https://helm.goharbor.io"
+        # Add the OpenFaas helm repo
+        openfaas:
+          url: "https://openfaas.github.io/faas-netes/"
+        # Add the Jaeger helm repo
+        jaegertracing:
+          url: "https://jaegertracing.github.io/helm-charts"
+
 
 
 install:
@@ -23,12 +45,8 @@ install:
       command: bash
       description: "Creating the ingress namespace."
       flags:
-          c: '"kubectl create namespace ingress-basic"'   
-  - helm3:
-      description: "Adding the \'stable\' Helm chart repository."  
-      repositories:
-        stable:
-          url: "https://kubernetes-charts.storage.googleapis.com"
+          c: '"kubectl create namespace {{bundle.parameters.ingress-namespace}}"' 
+
   - helm3:
       description: "Use Helm to deploy an NGINX ingress controller."
       name: nginx-ingress
@@ -39,8 +57,9 @@ install:
       wait: true # default true
       set:
         controller.replicaCount: 2
-        controller.nodeSelector.beta.kubernetes.io/os: linux      
-        defaultBackend.nodeSelector.beta.kubernetes.io/os: linux
+        controller.nodeSelector."beta\.kubernetes\.io/os": linux      
+        defaultBackend.nodeSelector."beta\.kubernetes\.io/os": linux
+      debug:  
 
 
 upgrade:
