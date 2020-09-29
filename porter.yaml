@@ -4,9 +4,9 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.0
-description: "A bundle that installs and removes the CNCF demo project. Use \"porter explain --tag <registry>/<organization>/<repository>/<image name>:version\" to display required and optional parameters, credentials, and outputs."
-tag: ghcr.io/squillace/cncf-projects-app/cncf:v0.1.0
+version: 0.1.2
+description: "A bundle that installs and removes the CNCF demo project. Use \'porter explain --tag <registry>/<organization>/<repository>/<image name>:version\' to display required and optional parameters, credentials, and outputs."
+tag: ghcr.io/squillace/cncf-projects-app/cncf
 
 # Moves mixins up to the top for faster bundle dev iteration
 dockerfile: Dockerfile.tmpl
@@ -41,8 +41,6 @@ install:
         controller.replicaCount: 2
         controller.nodeSelector.beta.kubernetes.io/os: linux      
         defaultBackend.nodeSelector.beta.kubernetes.io/os: linux
- 
-
 
 
 upgrade:
