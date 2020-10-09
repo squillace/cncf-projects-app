@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.3
+version: 0.1.4
 description: "A bundle that installs and removes the CNCF demo project. Use \'porter explain --tag <registry>/<organization>/<repository>/<image name>:version\' to display required and optional parameters, credentials, and outputs."
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
@@ -17,7 +17,7 @@ mixins:
   - helm3:
       #NOTE: the recently secured version of Helm 3 detects and fails the jetstack 
       # helm chart out due to an invalid yaml key "serverInfo"
-      clientVersion: v3.3.3
+      clientVersion: v3.3.4
       repositories:
         # Add the official stable repository
         stable:
