@@ -5,7 +5,7 @@
 
 name: cncf-projects-app
 version: 0.1.5
-description: "A bundle that installs and removes the CNCF demo project. Use \'porter explain --tag <registry>/<organization>/<repository>/<image name>:version\' to display required and optional parameters, credentials, and outputs."
+description: "A bundle that installs and removes the CNCF demo project. This application installs ngnix ingresses, Harbor, cert-manager & letsencrypt, rook/ceph, openfaas, and jaeger and prometheus, mysql|vitess, Linkerd, and Tekton."
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
 # Moves mixins up to the top for faster bundle dev iteration
