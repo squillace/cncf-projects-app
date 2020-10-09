@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.4
+version: 0.1.5
 description: "A bundle that installs and removes the CNCF demo project. Use \'porter explain --tag <registry>/<organization>/<repository>/<image name>:version\' to display required and optional parameters, credentials, and outputs."
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
@@ -77,16 +77,59 @@ install:
         wait: true
   - exec:
       command: bash
-      description: "Creating the ingress namespace."
+      description: "Creating the harbor system ingress namespace."
       flags:
-          c: '"kubectl create namespace {{bundle.parameters.harbor-ingress-namespace}}"' 
+        c: '"kubectl create namespace {{bundle.parameters.harbor-ingress-namespace}}"' 
 
   - exec:
-        command: bash
-        description: "Installing the nginx ingress...."
+      command: bash
+      description: "Installing the harbor system ingress...."
+      arguments:
+          - "harbor-system-ingress.sh"
+          - "{{bundle.parameters.harbor-ingress-namespace}}"
+
+  - exec:
+      command: bash
+      description: "Label harbor ingress namespace for cert-manager...."
+      flags:
+        c: '"kubectl label namespace {{bundle.parameters.harbor-ingress-namespace}} cert-manager.io/disable-validation=true"'  
+          # kubectl label namespace harbor-ingress-system cert-manager.io/disable-validation=true
+
+  - exec:
+      command: bash
+      description: "Label ingress namespace for cert-manager...."
+      flags:
+        c: '"kubectl label namespace {{bundle.parameters.ingress-namespace}} cert-manager.io/disable-validation=true"'  
+          # kubectl label namespace ingress-basic cert-manager.io/disable-validation=true     
+  
+  - exec:
+      command: bash
+      description: "Installing cert manager for the basic ingress...."
+      arguments:
+          - "cert-manager.sh"
+          - "{{bundle.parameters.ingress-namespace}}"
+
+  - exec:
+      command: bash
+      description: "Installing the cluster issuer to work with cert manager...."
+      arguments:
+          - "cluster-issuer.sh"
+          - "{{bundle.parameters.cert-email-address}}"
+
+  - exec:
+        description: "Get harbor system ingress IP address...."
+        command: "kubectl"
         arguments:
-            - "harbor-system-ingress.sh"
-            - "{{bundle.parameters.harbor-ingress-namespace}}"
+          - "get"
+          - "service"
+          - "harbor-nginx-ingress-ingress-nginx-controller"
+        flags:
+          o: "json"
+          namespace: "{{bundle.parameters.harbor-ingress-namespace}}"
+        outputs:
+          - name: "harbor-lb-ip"
+            jsonPath: "$.status.loadBalancer.ingress[0].ip"
+
 upgrade:
   - exec:
       description: "TODO: understand what upgrade of this might mean."
@@ -95,15 +138,28 @@ upgrade:
         - upgrade
 
 uninstall:
+  - exec:
+      command: bash
+      description: "Deleting the cluster issuer to work with cert manager...."
+      arguments:
+        - "delete-cluster-issuer.sh"
+        - "{{bundle.parameters.cert-email-address}}"
 
   - helm3:
-      description: "Deleting the basic ingress Helm chart resources."
+      description: "Deleting the cert manager chart resources."
+      namespace: "{{bundle.parameters.ingress-namespace}}"
+      releases:
+        - "cert-manager" # parameterize?
+
+
+  - helm3:
+      description: "Deleting the harbor ingress Helm chart resources."
       namespace: "{{bundle.parameters.harbor-ingress-namespace}}"
       releases:
         - "harbor-nginx-ingress" # parameterize?
 
   - exec:
-      description: "delete "
+      description: "Deleting the harbor ingress namespace... "
       command: kubectl
       arguments:
         - delete
@@ -117,11 +173,7 @@ uninstall:
             - "yml/rook-cluster.yaml"
             - "yml/rook-operator.yaml"
 #            - "yml/rook-common.yaml"
-
         wait: true
-
-
-
 
   - helm3:
       description: "Deleting the basic ingress Helm chart resources."
@@ -130,12 +182,22 @@ uninstall:
         - "nginx-ingress" # parameterize?
 
   - exec:
-      description: "delete "
+      description: "Deleting the basic ingress namespace... "
       command: kubectl
       arguments:
         - delete
         - namespace
         - "{{bundle.parameters.ingress-namespace}}"
+
+
+ # until we figure out the race condition here, this will be the last task to purge your cluster       
+  - exec:
+      command: bash
+      description: '"Now run \"cat yml/rook-common.yaml | kubectl delete -f -\" to delete the remaining detritus."'
+      suppress-output: true
+      flags:
+          c: '"cat yml/rook-common.yaml | kubectl delete -f -"'
+
 
 # Below is an example of how to define credentials
 # See https://porter.sh/author-bundles/#credentials
@@ -150,9 +212,21 @@ credentials:
 # See https://porter.sh/author-bundles/#parameters
 parameters:
   - name: ingress-namespace
+    description: "The namespace given to the basic ingress."
     type: string
     default: ingress-basic
   - name: harbor-ingress-namespace
+    description: "The harbor system namespace."
     type: string
     default: harbor-ingress-system
+  - name: cert-email-address
+    description: "The email address passed to letsencrypt for the cluster issuer."
+    type: string
+    default: example@contoso.com
 
+outputs:
+    - name: harbor-lb-ip
+      description: "The IP address assigned to the harbor ingress load balancer."
+      type: string
+      appliesTo:
+        - install
