@@ -149,9 +149,9 @@ install:
 upgrade:
   - exec:
       description: "TODO: understand what upgrade of this might mean."
-      command: ./helpers.sh
-      arguments:
-        - upgrade
+      command: bash
+      flags:
+          c: '"echo Not yet implemented."'
 
 uninstall:
   - exec:
