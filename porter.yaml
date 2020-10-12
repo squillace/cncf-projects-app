@@ -4,8 +4,8 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.5
-description: "A bundle that installs and removes the CNCF demo project. This application installs ngnix ingresses, Harbor, cert-manager & letsencrypt, rook/ceph, openfaas, and jaeger and prometheus, mysql|vitess, Linkerd, and Tekton."
+version: 0.1.8
+description: "A bundle that installs and removes the CNCF demo project and its resources. This application installs ngnix ingresses, Harbor, cert-manager & letsencrypt, rook/ceph, openfaas, and jaeger and prometheus, mysql|vitess, Linkerd, and Tekton."
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
 # Moves mixins up to the top for faster bundle dev iteration
@@ -45,26 +45,27 @@ install:
       flags:
           c: '"kubectl create namespace {{bundle.parameters.ingress-namespace}}"' 
 
-  - exec:
-        command: bash
-        description: "Installing the nginx ingress...."
-        arguments:
-            - "nginx-ingress.sh"
-            - "{{bundle.parameters.ingress-namespace}}"
+#  - exec:
+#        command: bash
+#        description: "Installing the nginx ingress...."
+#        arguments:
+#            - "nginx-ingress.sh"
+#            - "{{bundle.parameters.ingress-namespace}}"
 
-#  - helm3:
-#      description: "Use Helm to deploy an NGINX ingress controller."
-#      name: nginx-ingress # parameterize
-#      chart: stable/nginx-ingress
-  #      version: CHART_VERSION
-#      namespace: "{{bundle.parameters.ingress-namespace}}"
-#      replace: true
-#      wait: true # default true
-#      set:
-#        controller.replicaCount: 2
-#        controller.nodeSelector.'beta.kubernetes.io/os': linux      
-#        defaultBackend.nodeSelector.'beta.kubernetes.io/os': linux
-#      debug:  
+  - helm3:
+      description: "Use Helm to deploy an NGINX ingress controller."
+      upsert: true # enables us to rerun the bundle easily
+      name: nginx-ingress # parameterize
+      chart: stable/nginx-ingress
+#      version: CHART_VERSION
+      namespace: "{{bundle.parameters.ingress-namespace}}"
+#      replace: true # removed to enable upsert behavior
+      wait: true # default true
+      set:
+        controller.replicaCount: 2
+        controller.nodeSelector."beta\.kubernetes\.io/os": linux      
+        defaultBackend.nodeSelector."beta\.kubernetes\.io/os": linux
+
 
   - kubernetes:
         description: "Installing Rook."
@@ -81,12 +82,25 @@ install:
       flags:
         c: '"kubectl create namespace {{bundle.parameters.harbor-ingress-namespace}}"' 
 
-  - exec:
-      command: bash
-      description: "Installing the harbor system ingress...."
-      arguments:
-          - "harbor-system-ingress.sh"
-          - "{{bundle.parameters.harbor-ingress-namespace}}"
+#  - exec:
+#      command: bash
+#      description: "Installing the harbor system ingress...."
+#      arguments:
+#          - "harbor-system-ingress.sh"
+#          - "{{bundle.parameters.harbor-ingress-namespace}}"
+  - helm3:
+      description: "Use Helm to deploy the Harbor nginx ingress controller."
+      upsert: true # enables us to rerun the bundle easily
+      name: harbor-nginx-ingress # parameterize
+      chart: ingress-nginx/ingress-nginx
+#      version: CHART_VERSION
+      namespace: "{{bundle.parameters.harbor-ingress-namespace}}"
+#      replace: true # removed to enable upsert behavior
+      wait: true # default true
+      set:
+        controller.replicaCount: 2
+        controller.nodeSelector."beta\.kubernetes\.io/os": linux      
+        defaultBackend.nodeSelector."beta\.kubernetes\.io/os": linux
 
   - exec:
       command: bash
@@ -102,12 +116,25 @@ install:
         c: '"kubectl label namespace {{bundle.parameters.ingress-namespace}} cert-manager.io/disable-validation=true"'  
           # kubectl label namespace ingress-basic cert-manager.io/disable-validation=true     
   
-  - exec:
-      command: bash
-      description: "Installing cert manager for the basic ingress...."
-      arguments:
-          - "cert-manager.sh"
-          - "{{bundle.parameters.ingress-namespace}}"
+#  - exec:
+#      command: bash
+#      description: "Installing cert manager for the basic ingress...."
+#      arguments:
+#          - "cert-manager.sh"
+#          - "{{bundle.parameters.ingress-namespace}}"
+
+  - helm3:
+      description: "Use Helm to deploy the Harbor nginx ingress controller."
+      upsert: true # enables us to rerun the bundle easily
+      name: cert-manager # parameterize
+      chart: jetstack/cert-manager
+      version: v0.16.1
+      namespace: "{{bundle.parameters.ingress-namespace}}"
+#      replace: true # removed to enable upsert behavior
+      wait: true 
+      set:
+        installCRDs: true
+        nodeSelector."beta\.kubernetes\.io/os": linux      
 
   - exec:
       command: bash
@@ -117,8 +144,9 @@ install:
           - "{{bundle.parameters.cert-email-address}}"
 
   - exec:
-        description: "Get harbor system ingress IP address...."
+        description: "Getting the harbor system ingress IP address...."
         command: "kubectl"
+        suppress-output: true
         arguments:
           - "get"
           - "service"
@@ -129,6 +157,14 @@ install:
         outputs:
           - name: "harbor-lb-ip"
             jsonPath: "$.status.loadBalancer.ingress[0].ip"
+
+#  - kubernetes:
+#        description: "apply vitess"
+#        manifests:
+#            - "vitess/examples/operator/operator.yaml"
+#            - "vitess/examples/operator/101_initial_cluster.yaml"
+#        validate: true
+#        wait: true
 
 upgrade:
   - exec:
@@ -228,5 +264,5 @@ outputs:
     - name: harbor-lb-ip
       description: "The IP address assigned to the harbor ingress load balancer."
       type: string
-      appliesTo:
+      applyTo:
         - install
