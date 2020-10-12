@@ -15,8 +15,6 @@ mixins:
   - exec
   - kubernetes
   - helm3:
-      #NOTE: the recently secured version of Helm 3 detects and fails the jetstack 
-      # helm chart out due to an invalid yaml key "serverInfo"
       clientVersion: v3.3.4
       repositories:
         # Add the official stable repository
