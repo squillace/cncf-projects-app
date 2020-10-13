@@ -19,5 +19,5 @@ RUN apt-get update && apt-get install -y ca-certificates
 # PORTER_MIXINS
 
 # Use the BUNDLE_DIR build argument to copy files into the bundle
-RUN helm3 repo update
+# RUN helm3 repo update
 COPY . $BUNDLE_DIR
