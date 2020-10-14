@@ -15,8 +15,6 @@ mixins:
   - exec
   - kubernetes
   - helm3:
-      #NOTE: the recently secured version of Helm 3 detects and fails the jetstack 
-      # helm chart out due to an invalid yaml key "serverInfo"
       clientVersion: v3.3.4
       repositories:
         # Add the official stable repository
@@ -45,16 +43,9 @@ install:
       flags:
           c: '"kubectl create namespace {{bundle.parameters.ingress-namespace}}"' 
 
-#  - exec:
-#        command: bash
-#        description: "Installing the nginx ingress...."
-#        arguments:
-#            - "nginx-ingress.sh"
-#            - "{{bundle.parameters.ingress-namespace}}"
-
   - helm3:
       description: "Use Helm to deploy an NGINX ingress controller."
-      upsert: true # enables us to rerun the bundle easily
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
       name: nginx-ingress # parameterize
       chart: stable/nginx-ingress
 #      version: CHART_VERSION
@@ -76,21 +67,17 @@ install:
             - "yml/rook-storageclass.yaml"
         validate: true
         wait: true
+
+
   - exec:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
         c: '"kubectl create namespace {{bundle.parameters.harbor-ingress-namespace}}"' 
 
-#  - exec:
-#      command: bash
-#      description: "Installing the harbor system ingress...."
-#      arguments:
-#          - "harbor-system-ingress.sh"
-#          - "{{bundle.parameters.harbor-ingress-namespace}}"
   - helm3:
       description: "Use Helm to deploy the Harbor nginx ingress controller."
-      upsert: true # enables us to rerun the bundle easily
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
       name: harbor-nginx-ingress # parameterize
       chart: ingress-nginx/ingress-nginx
 #      version: CHART_VERSION
@@ -116,16 +103,9 @@ install:
         c: '"kubectl label namespace {{bundle.parameters.ingress-namespace}} cert-manager.io/disable-validation=true"'  
           # kubectl label namespace ingress-basic cert-manager.io/disable-validation=true     
   
-#  - exec:
-#      command: bash
-#      description: "Installing cert manager for the basic ingress...."
-#      arguments:
-#          - "cert-manager.sh"
-#          - "{{bundle.parameters.ingress-namespace}}"
-
   - helm3:
       description: "Use Helm to deploy the Harbor nginx ingress controller."
-      upsert: true # enables us to rerun the bundle easily
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
       name: cert-manager # parameterize
       chart: jetstack/cert-manager
       version: v0.16.1
@@ -169,9 +149,9 @@ install:
 upgrade:
   - exec:
       description: "TODO: understand what upgrade of this might mean."
-      command: ./helpers.sh
-      arguments:
-        - upgrade
+      command: bash
+      flags:
+          c: '"echo Not yet implemented."'
 
 uninstall:
   - exec:
