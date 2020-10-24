@@ -1,0 +1,119 @@
+# This is the configuration for Porter
+# You must define steps for each action, but the rest is optional
+# See https://porter.sh/author-bundles for documentation on how to configure your bundle
+# Uncomment out the sections below to take full advantage of what Porter can do!
+
+name: cncf-projects-middle
+version: 0.1.0
+description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
+tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
+
+# Moves mixins up to the top for faster bundle dev iteration
+dockerfile: Dockerfile.tmpl
+
+mixins:
+  - exec
+  - kubernetes
+  - mysql
+  - helm3:
+      clientVersion: v3.3.4
+      repositories:
+        # Add the harbor helm repo 
+        harbor:
+          url: "https://helm.goharbor.io"
+        # Add the OpenFaas helm repo
+        openfaas:
+          url: "https://openfaas.github.io/faas-netes/"
+        # Add the Jaeger helm repo
+        jaegertracing:
+          url: "https://jaegertracing.github.io/helm-charts"
+
+install:
+  - exec:
+      command: bash
+      description: "Creating the harbor system ingress namespace."
+      flags:
+        c: '"kubectl create namespace harbor-system"' 
+
+  - helm3:
+      description: "Use Helm to deploy the Harbor registry."
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
+      name: harbor # parameterize
+      chart: harbor/harbor
+      namespace: harbor-system
+#      replace: true # removed to enable upsert behavior
+#      wait: true 
+      set:
+        expose.tls.secretName: ingress-cert-harbor 
+        notary.enabled: false 
+        trivy.enabled: false
+        persistence.enabled: true 
+        expose.ingress.hosts.core: squillace.io
+        externalURL: https://squillace.io 
+        harborAdminPassword: admin 
+        persistence.persistentVolumeClaim.registry.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.chartmuseum.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.jobservice.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.database.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.redis.storageClass: rook-ceph-block 
+      values:
+        - "./harbor-chart-values.yaml"
+
+
+
+
+#  - kubernetes:
+#        description: "apply vitess"
+#        manifests:
+#            - "vitess/examples/operator/operator.yaml"
+#            - "vitess/examples/operator/101_initial_cluster.yaml"
+#        validate: true
+#        wait: true
+
+upgrade:
+  - exec:
+      description: "TODO: understand what upgrade of this might mean."
+      command: bash
+      flags:
+          c: '"echo Not yet implemented."'
+
+uninstall:
+
+  - helm3:
+      description: "Deleting the harbor chart resources."
+      namespace: harbor-system
+      releases:
+        - "harbor" # parameterize?
+
+  - exec:
+      description: "Deleting the harbor system namespace... "
+      command: kubectl
+      arguments:
+        - delete
+        - namespace
+        - harbor-system
+
+
+# Below is an example of how to define credentials
+# See https://porter.sh/author-bundles/#credentials
+credentials:
+  - name: kubeconfig
+    type: file
+    path: /root/.kube/config
+
+
+
+# Below is an example of how to define parameters
+# See https://porter.sh/author-bundles/#parameters
+parameters:
+  - name: harbor-lb-dns
+    description: "The DNS entry for the harbor-lb IP address."
+    type: string
+    default: squillace.io
+
+#outputs:
+#    - name: harbor-lb-ip
+#      description: "The IP address assigned to the harbor ingress load balancer."
+#      type: string
+#      applyTo:
+#        - install
