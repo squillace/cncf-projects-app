@@ -1,0 +1,5 @@
+expose:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: harbor-nginx
+      cert-manager.iocluster-issuer: letsencrypt

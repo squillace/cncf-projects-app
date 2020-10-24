@@ -36,6 +36,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_PASSWORD }}
+          working-directory: porter/front/
       - name: Retag bundle for ghcr.io
         run: |
           sed -i.bu "s/squillace\//${{ github.repository_owner }}\//g" ./porter.yaml

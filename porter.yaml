@@ -138,6 +138,38 @@ install:
         outputs:
           - name: "harbor-lb-ip"
             jsonPath: "$.status.loadBalancer.ingress[0].ip"
+  - exec:
+      command: bash
+      description: "Creating the harbor system ingress namespace."
+      flags:
+        c: '"kubectl create namespace harbor-system"' 
+
+  - helm3:
+      description: "Use Helm to deploy the Harbor registry."
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
+      name: harbor # parameterize
+      chart: harbor/harbor
+      namespace: harbor-system
+#      replace: true # removed to enable upsert behavior
+#      wait: true 
+      set:
+        expose.tls.secretName: ingress-cert-harbor 
+        notary.enabled: false 
+        trivy.enabled: false
+        persistence.enabled: true 
+        expose.ingress.hosts.core: squillace.io
+        externalURL: https://squillace.io 
+        harborAdminPassword: admin 
+        persistence.persistentVolumeClaim.registry.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.chartmuseum.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.jobservice.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.database.storageClass: rook-ceph-block 
+        persistence.persistentVolumeClaim.redis.storageClass: rook-ceph-block 
+      values:
+        - "./harbor-chart-values.yaml"
+
+
+
 
 #  - kubernetes:
 #        description: "apply vitess"
@@ -155,6 +187,20 @@ upgrade:
           c: '"echo Not yet implemented."'
 
 uninstall:
+
+  - helm3:
+      description: "Deleting the harbor chart resources."
+      namespace: harbor-system
+      releases:
+        - "harbor" # parameterize?
+
+  - exec:
+      description: "Deleting the harbor system namespace... "
+      command: kubectl
+      arguments:
+        - delete
+        - namespace
+        - harbor-system
   - exec:
       command: bash
       description: "Deleting the cluster issuer to work with cert manager...."
