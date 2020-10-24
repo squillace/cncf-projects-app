@@ -26,15 +26,7 @@ mixins:
         # Add the Jetstack Helm repository
         jetstack:
           url: "https://charts.jetstack.io" 
-        # Add the harbor helm repo 
-        harbor:
-          url: "https://helm.goharbor.io"
-        # Add the OpenFaas helm repo
-        openfaas:
-          url: "https://openfaas.github.io/faas-netes/"
-        # Add the Jaeger helm repo
-        jaegertracing:
-          url: "https://jaegertracing.github.io/helm-charts"
+
 
 install:
   - exec:
@@ -61,10 +53,10 @@ install:
   - kubernetes:
         description: "Installing Rook."
         manifests:
-            - "../../yml/rook-common.yaml"
-            - "../../yml/rook-operator.yaml"
-            - "../../yml/rook-cluster.yaml"
-            - "../../yml/rook-storageclass.yaml"
+            - "./yml/rook-common.yaml"
+            - "./yml/rook-operator.yaml"
+            - "./yml/rook-cluster.yaml"
+            - "./yml/rook-storageclass.yaml"
         validate: true
         wait: true
 
@@ -138,46 +130,6 @@ install:
         outputs:
           - name: "harbor-lb-ip"
             jsonPath: "$.status.loadBalancer.ingress[0].ip"
-  - exec:
-      command: bash
-      description: "Creating the harbor system ingress namespace."
-      flags:
-        c: '"kubectl create namespace harbor-system"' 
-
-  - helm3:
-      description: "Use Helm to deploy the Harbor registry."
-      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
-      name: harbor # parameterize
-      chart: harbor/harbor
-      namespace: harbor-system
-#      replace: true # removed to enable upsert behavior
-#      wait: true 
-      set:
-        expose.tls.secretName: ingress-cert-harbor 
-        notary.enabled: false 
-        trivy.enabled: false
-        persistence.enabled: true 
-        expose.ingress.hosts.core: squillace.io
-        externalURL: https://squillace.io 
-        harborAdminPassword: admin 
-        persistence.persistentVolumeClaim.registry.storageClass: rook-ceph-block 
-        persistence.persistentVolumeClaim.chartmuseum.storageClass: rook-ceph-block 
-        persistence.persistentVolumeClaim.jobservice.storageClass: rook-ceph-block 
-        persistence.persistentVolumeClaim.database.storageClass: rook-ceph-block 
-        persistence.persistentVolumeClaim.redis.storageClass: rook-ceph-block 
-      values:
-        - "./harbor-chart-values.yaml"
-
-
-
-
-#  - kubernetes:
-#        description: "apply vitess"
-#        manifests:
-#            - "vitess/examples/operator/operator.yaml"
-#            - "vitess/examples/operator/101_initial_cluster.yaml"
-#        validate: true
-#        wait: true
 
 upgrade:
   - exec:
@@ -188,19 +140,6 @@ upgrade:
 
 uninstall:
 
-  - helm3:
-      description: "Deleting the harbor chart resources."
-      namespace: harbor-system
-      releases:
-        - "harbor" # parameterize?
-
-  - exec:
-      description: "Deleting the harbor system namespace... "
-      command: kubectl
-      arguments:
-        - delete
-        - namespace
-        - harbor-system
   - exec:
       command: bash
       description: "Deleting the cluster issuer to work with cert manager...."
@@ -232,9 +171,9 @@ uninstall:
   - kubernetes:
         description: "Uninstalling Rook...."
         manifests:
-            - "../../yml/rook-storageclass.yaml"
-            - "../../yml/rook-cluster.yaml"
-            - "../../yml/rook-operator.yaml"
+            - "yml/rook-storageclass.yaml"
+            - "yml/rook-cluster.yaml"
+            - "yml/rook-operator.yaml"
 #            - "yml/rook-common.yaml"
         wait: true
 
@@ -259,7 +198,7 @@ uninstall:
       description: '"Now run \"cat yml/rook-common.yaml | kubectl delete -f -\" to delete the remaining detritus."'
       suppress-output: true
       flags:
-          c: '"cat ../../yml/rook-common.yaml | kubectl delete -f -"'
+          c: '"cat yml/rook-common.yaml | kubectl delete -f -"'
 
 
 # Below is an example of how to define credentials
