@@ -42,7 +42,7 @@ jobs:
           sed -i.bu "s/squillace\//${{ github.repository_owner }}\//g" ./porter.yaml
           grep "tag:" ./porter.yaml
           grep "version" ./porter.yaml
-          popd porter/front/
+          popd 
       - name: Porter publish "Front" to ghcr.io
         run: |
           pushd porter/front/
