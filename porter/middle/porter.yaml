@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-middle
-version: 0.1.1
+version: 0.1.2
 description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
 
@@ -48,8 +48,8 @@ install:
         notary.enabled: false 
         trivy.enabled: false
         persistence.enabled: true 
-        expose.ingress.hosts.core: squillace.io
-        externalURL: https://squillace.io 
+        expose.ingress.hosts.core: "{{bundle.parameters.harbor-lb-dns}}"
+        externalURL: "https://{{bundle.parameters.harbor-lb-dns}}" 
         harborAdminPassword: admin 
         persistence.persistentVolumeClaim.registry.storageClass: rook-ceph-block 
         persistence.persistentVolumeClaim.chartmuseum.storageClass: rook-ceph-block 
