@@ -61,10 +61,10 @@ install:
   - kubernetes:
         description: "Installing Rook."
         manifests:
-            - "yml/rook-common.yaml"
-            - "yml/rook-operator.yaml"
-            - "yml/rook-cluster.yaml"
-            - "yml/rook-storageclass.yaml"
+            - "../../yml/rook-common.yaml"
+            - "../../yml/rook-operator.yaml"
+            - "../../yml/rook-cluster.yaml"
+            - "../../yml/rook-storageclass.yaml"
         validate: true
         wait: true
 
@@ -232,9 +232,9 @@ uninstall:
   - kubernetes:
         description: "Uninstalling Rook...."
         manifests:
-            - "yml/rook-storageclass.yaml"
-            - "yml/rook-cluster.yaml"
-            - "yml/rook-operator.yaml"
+            - "../../yml/rook-storageclass.yaml"
+            - "../../yml/rook-cluster.yaml"
+            - "../../yml/rook-operator.yaml"
 #            - "yml/rook-common.yaml"
         wait: true
 
@@ -259,7 +259,7 @@ uninstall:
       description: '"Now run \"cat yml/rook-common.yaml | kubectl delete -f -\" to delete the remaining detritus."'
       suppress-output: true
       flags:
-          c: '"cat yml/rook-common.yaml | kubectl delete -f -"'
+          c: '"cat ../../yml/rook-common.yaml | kubectl delete -f -"'
 
 
 # Below is an example of how to define credentials
