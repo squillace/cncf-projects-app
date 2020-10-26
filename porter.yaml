@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.8
+version: 0.1.9
 description: "A bundle that installs and removes the CNCF demo project and its resources. This application installs ngnix ingresses, Harbor, cert-manager & letsencrypt, rook/ceph, openfaas, and jaeger and prometheus, mysql|vitess, Linkerd, and Tekton."
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
@@ -54,8 +54,8 @@ install:
       wait: true # default true
       set:
         controller.replicaCount: 2
-        controller.nodeSelector."beta\.kubernetes\.io/os": linux      
-        defaultBackend.nodeSelector."beta\.kubernetes\.io/os": linux
+      values: 
+        - "./ingress-basic-values.yaml"
 
 
   - kubernetes:
@@ -86,8 +86,8 @@ install:
       wait: true # default true
       set:
         controller.replicaCount: 2
-        controller.nodeSelector."beta\.kubernetes\.io/os": linux      
-        defaultBackend.nodeSelector."beta\.kubernetes\.io/os": linux
+      values: 
+        - "./ingress-basic-values.yaml"
 
   - exec:
       command: bash
@@ -114,7 +114,8 @@ install:
       wait: true 
       set:
         installCRDs: true
-        nodeSelector."beta\.kubernetes\.io/os": linux      
+      values: 
+        - "./cert-manager-values.yaml" 
 
   - exec:
       command: bash
