@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-middle
-version: 0.1.3
+version: 0.1.4
 description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
 
@@ -15,6 +15,7 @@ mixins:
   - exec
   - kubernetes
   - mysql
+  - jq
   - helm3:
       clientVersion: v3.3.4
       repositories:
@@ -35,7 +36,7 @@ install:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
-        c: '"kubectl create namespace harbor-system"' 
+        c: '"kubectl create ns harbor-system --dry-run=client -o yaml | kubectl apply -f -"' 
 
   - helm3:
       description: "Use Helm to deploy the Harbor registry."
@@ -60,6 +61,7 @@ install:
         persistence.persistentVolumeClaim.redis.storageClass: rook-ceph-block 
       values:
         - "./harbor-chart-values.yaml"
+
   - exec:
       command: bash
       description: "Editing the Harbor stateful set to restart pods properly."
@@ -67,8 +69,30 @@ install:
       arguments:
         - "edit-harbor-ss.sh"
 
-# then pipe out this to a file and kubectl apply -f
-#  k get statefulset -n harbor-system harbor-harbor-database -o json | jq --arg newCommand "chown -R postgres:postgres /var/lib/postgresql/data; chmod 700 -R /var/lib/postgresql/data" '.spec.template.spec.initContainers[].args[1]="$newCommand" | .spec.template.spec.initContainers[].args[0]="-c"' | kubectl apply -f -
+  - exec:
+      command: bash
+      description: "Creating the harbor system ingress namespace."
+      flags:
+        c: '" kubectl create ns mysql --dry-run=client -o yaml | kubectl apply -f -"' 
+
+
+  - helm3:
+      description: "Use Helm to deploy MySQL."
+      upsert: true # uses "helm3 upgrade --install" instead of install. Can't use --replace.
+      name: mysql # parameterize
+      chart: stable/mysql
+      namespace: mysql
+#      replace: true # removed to enable upsert behavior
+#      wait: true 
+      set:
+        mysqlRootPassword: "FTA@CNCF0n@zure3"
+        mysqlUser: "ftacncf"
+        mysqlPassword: "FTA@CNCF0n@zure3"
+        mysqlDatabase: "conexp-mysql"
+        persistence.storageClass: "rook-ceph-block"
+#      values:
+#        - "./harbor-chart-values.yaml"
+
 
 #  - kubernetes:
 #        description: "apply vitess"
@@ -88,7 +112,20 @@ upgrade:
 uninstall:
 
   - helm3:
-      description: "Deleting the harbor chart resources."
+      description: "Deleting the mysql chart resources..."
+      namespace: mysql
+      releases:
+        - mysql
+  - exec:
+      command: kubectl
+      description: "Deleting the mysql namespace..."
+      suppress-output: false
+      arguments:
+        - delete
+        - namespace
+        - mysql
+  - helm3:
+      description: "Deleting the harbor chart resources..."
       namespace: harbor-system
       releases:
         - "harbor" # parameterize?
