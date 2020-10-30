@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-middle
-version: 0.1.2
+version: 0.1.3
 description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
 
@@ -19,6 +19,8 @@ mixins:
       clientVersion: v3.3.4
       repositories:
         # Add the harbor helm repo 
+        stable:
+          url: 	https://charts.helm.sh/stable
         harbor:
           url: "https://helm.goharbor.io"
         # Add the OpenFaas helm repo
@@ -58,6 +60,12 @@ install:
         persistence.persistentVolumeClaim.redis.storageClass: rook-ceph-block 
       values:
         - "./harbor-chart-values.yaml"
+  - exec:
+      command: bash
+      description: "Editing the Harbor stateful set to restart pods properly."
+      suppress-output: false
+      arguments:
+        - "edit-harbor-ss.sh"
 
 # then pipe out this to a file and kubectl apply -f
 #  k get statefulset -n harbor-system harbor-harbor-database -o json | jq --arg newCommand "chown -R postgres:postgres /var/lib/postgresql/data; chmod 700 -R /var/lib/postgresql/data" '.spec.template.spec.initContainers[].args[1]="$newCommand" | .spec.template.spec.initContainers[].args[0]="-c"' | kubectl apply -f -
