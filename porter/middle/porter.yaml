@@ -36,7 +36,7 @@ install:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
-        c: '"kubectl create ns harbor-system --dry-run=client -o yaml | kubectl apply -f -"' 
+        c: '"kubectl create ns harbor-system --dry-run -o yaml | kubectl apply -f -"' 
 
   - helm3:
       description: "Use Helm to deploy the Harbor registry."
@@ -73,7 +73,7 @@ install:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
-        c: '" kubectl create ns mysql --dry-run=client -o yaml | kubectl apply -f -"' 
+        c: '" kubectl create ns mysql --dry-run -o yaml | kubectl apply -f -"' 
 
 
   - helm3:

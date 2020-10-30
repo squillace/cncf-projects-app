@@ -33,7 +33,7 @@ install:
       command: bash
       description: "Creating the ingress namespace."
       flags:
-          c: '"kubectl create ns {{bundle.parameters.ingress-namespace}} --dry-run=client -o yaml | kubectl apply -f -"' 
+          c: '"kubectl create ns {{bundle.parameters.ingress-namespace}} --dry-run -o yaml | kubectl apply -f -"' 
 
   - helm3:
       description: "Use Helm to deploy an NGINX ingress controller."
@@ -65,7 +65,7 @@ install:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
-        c: '"kubectl create ns {{bundle.parameters.harbor-ingress-namespace}} --dry-run=client -o yaml | kubectl apply -f -"' 
+        c: '"kubectl create ns {{bundle.parameters.harbor-ingress-namespace}} --dry-run -o yaml | kubectl apply -f -"' 
 
   - helm3:
       description: "Use Helm to deploy the Harbor nginx ingress controller."
