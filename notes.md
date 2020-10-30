@@ -120,10 +120,10 @@ kubectl get svc -n harbor-ingress-system
 
 Assign a DNS label to the Ingress Public IP and update it for the registryHost variable
 
-If using AKS, a DNS name label can be assigend to the public IP of the Loadbalancer
- - Open the Public IP resource associated with the EXTERNAL-IP address of the LoadBalancer service
+If using AKS, a DNS name label can be assigend to the public IP of the Loadbalancer created in the harbor-ingress-system namespace.
+ - Open the Public IP resource associated with the EXTERNAL-IP address of the LoadBalancer service for harbor ingress
  - Navigate to the Configuration blade and set a unique name in the DNS name label
- - Use the FQDN. For ex. uniquename.centralus.cloudapp.azure.com
+ - Use the FQDN. For ex. uniquenameforharboringress.centralus.cloudapp.azure.com
 
 ```
 registryHost={FQDN DNS label Name to be updated here}
