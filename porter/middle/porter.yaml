@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-middle
-version: 0.1.6
+version: 0.1.7
 description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
 
