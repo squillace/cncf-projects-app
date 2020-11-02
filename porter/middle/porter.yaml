@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-middle
-version: 0.1.7
+version: 0.1.8
 description: "A bundle that installs the second portion and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf-middle
 
@@ -71,7 +71,7 @@ install:
 
   - exec:
       command: bash
-      description: "Creating the harbor system ingress namespace."
+      description: "Creating the mysql namespace."
       flags:
         c: '" kubectl create ns mysql --dry-run -o yaml | kubectl apply -f -"' 
 
