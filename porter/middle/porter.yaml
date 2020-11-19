@@ -34,7 +34,7 @@ mixins:
 install:
   - exec:
       command: bash
-      description: "Creating the harbor system ingress namespace."
+      description: "Creating the harbor system namespace."
       flags:
         c: '"kubectl create ns harbor-system --dry-run -o yaml | kubectl apply -f -"' 
 
@@ -154,7 +154,7 @@ parameters:
   - name: harbor-lb-dns
     description: "The DNS entry for the harbor-lb IP address."
     type: string
-    default: squillace.io
+    default: harbor.squillace.io
 
 #outputs:
 #    - name: harbor-lb-ip

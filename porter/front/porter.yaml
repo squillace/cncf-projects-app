@@ -4,7 +4,7 @@
 # Uncomment out the sections below to take full advantage of what Porter can do!
 
 name: cncf-projects-app
-version: 0.1.13
+version: 0.1.14
 description: "A bundle that installs and removes the CNCF demo project and its resources. "
 tag: ghcr.io/squillace/cncf-projects-app/cncf
 
@@ -65,7 +65,7 @@ install:
       command: bash
       description: "Creating the harbor system ingress namespace."
       flags:
-        c: '"kubectl create ns {{bundle.parameters.harbor-ingress-namespace}} --dry-run -o yaml | kubectl apply -f -"' 
+        c: '"sdfsddfdf kubectl create ns {{bundle.parameters.harbor-ingress-namespace}} --dry-run -o yaml | kubectl apply -f -"' 
 
   - helm3:
       description: "Use Helm to deploy the Harbor nginx ingress controller."
@@ -224,7 +224,7 @@ parameters:
   - name: cert-email-address
     description: "The email address passed to letsencrypt for the cluster issuer."
     type: string
-    default: example@contoso.com
+    default: faisalm@microsoft.com
 
 outputs:
     - name: harbor-lb-ip

@@ -1,3 +1,2 @@
-defaultBackend:
-  nodeSelector:
-    beta.kubernetes.io/os: "linux"
+nodeSelector:
+  beta.kubernetes.io/os: "linux"
