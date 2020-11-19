@@ -14,17 +14,17 @@ Following commands from the first section of the referenced Docs Link is needed.
 # Create a namespace for your ingress resources
 kubectl create namespace ingress-basic
 
-# Add the official stable repository
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+# Add the ingress-nginx repository
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 # Use Helm to deploy an NGINX ingress controller
-helm install nginx-ingress stable/nginx-ingress \
+helm install nginx-ingress ingress-nginx/ingress-nginx \
     --namespace ingress-basic \
     --set controller.replicaCount=2 \
     --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
-    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+    --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux
 ```
-
 Set the variable to be used as the top level domain for this exercise. Use a custom domain or a cloud service provided domain name.
 ```
 topLevelDomain=desiredhostnamename.com
@@ -120,10 +120,10 @@ kubectl get svc -n harbor-ingress-system
 
 Assign a DNS label to the Ingress Public IP and update it for the registryHost variable
 
-If using AKS, a DNS name label can be assigend to the public IP of the Loadbalancer
- - Open the Public IP resource associated with the EXTERNAL-IP address of the LoadBalancer service
+If using AKS, a DNS name label can be assigend to the public IP of the Loadbalancer created in the harbor-ingress-system namespace.
+ - Open the Public IP resource associated with the EXTERNAL-IP address of the LoadBalancer service for harbor ingress
  - Navigate to the Configuration blade and set a unique name in the DNS name label
- - Use the FQDN. For ex. uniquename.centralus.cloudapp.azure.com
+ - Use the FQDN. For ex. uniquenameforharboringress.centralus.cloudapp.azure.com
 
 ```
 registryHost={FQDN DNS label Name to be updated here}
